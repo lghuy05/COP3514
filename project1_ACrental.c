@@ -57,8 +57,8 @@ int charge(int ac_selection, int days){
 
 //Handles user inputs, validate data and display messages.
 void ACrental(){
-    printf("Please select from four types of AC: 1,2,3 and 4\n");
-    printf("Enter selection:");
+    printf("Please select from four types of AC: 1, 2, 3, and 4\n");
+    printf("Enter selection: ");
 
     int ac_selection;
     if (scanf("%d", &ac_selection) != 1 || ac_selection < 1 || ac_selection > 4){
