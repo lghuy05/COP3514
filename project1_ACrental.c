@@ -43,17 +43,19 @@ int charge(int ac_selection, int days){
     int remaining_day = days % 7;
     int weeks = days / 7;
     int total_charge = weeks * max_week_charge;
-    
-    int partial_charge;
-    if (weeks == 0){
-        partial_charge = flat_fee + (remaining_day - 1) * daily_charge;
-    }else {
-        partial_charge = remaining_day * daily_charge;
-    }
-    if (partial_charge  > max_week_charge ){
-        partial_charge = max_week_charge;
-    }
-    total_charge += partial_charge;
+    if (remaining_day > 0) {
+        int partial_charge;
+        if (weeks == 0){
+           // Only apply flat fee when there is no full week
+            partial_charge = flat_fee + (remaining_day - 1) * daily_charge;
+        }else {
+            partial_charge = remaining_day * daily_charge;
+        }
+        if (partial_charge  > max_week_charge ){
+            partial_charge = max_week_charge;
+        }
+        total_charge += partial_charge;
+    }    
 
     return total_charge;
 }
