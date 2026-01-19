@@ -75,7 +75,7 @@ void ACrental(){
     }
 
     int total_charge = charge(ac_selection, days);
-    printf("Charge($): %d\n", total_charge);
+    printf("Charge($): %d", total_charge);
 }
 
 int main(){
