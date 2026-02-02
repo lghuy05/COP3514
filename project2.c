@@ -36,7 +36,6 @@ void ascii_stream_analyzer() {
       printf("No conversion done\n");
     }
 
-    printf("\n");
   } while (c != '#' && c != EOF);
 }
 
