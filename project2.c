@@ -5,7 +5,6 @@ void ascii_stream_analyzer() {
   int c;
   printf("Enter 1 or more characters then ENTER:\n");
   printf("(NOTE: a character # will exit the program):\n");
-  printf("\n");
 
   do {
     c = getchar();
