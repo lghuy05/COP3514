@@ -4,26 +4,36 @@ void ascii_stream_analyzer(void) {
   int c;
 
   while (1) {
-    /* Prompt */
+    /* Print prompt (NO extra blank line here) */
     printf("Enter 1 or more characters then ENTER:\n");
-    printf("(NOTE: a character # will exit the program):\n\n");
+    printf("(NOTE: a character # will exit the program):\n");
 
-    int first = 1; // controls blank lines between character blocks
+    int first_block_in_line = 1; // controls blank line after prompt
+    int printed_any_block = 0;   // did we print at least one block this line?
 
     while ((c = getchar()) != EOF) {
 
-      if (c == '\n') {
-        break; // new line → re-prompt
-      }
-
       if (c == '#') {
-        return; // exit program immediately
+        return; // exit immediately (no extra blank line for CASE #1)
       }
 
-      if (!first) {
-        printf("\n"); // blank line BETWEEN blocks only
+      if (c == '\n') {
+        /* End of this input line */
+        if (printed_any_block) {
+          printf("\n"); // blank line BEFORE next prompt (needed for CASE #10)
+        }
+        break; // go re-prompt
       }
-      first = 0;
+
+      /* We are going to print a block now */
+      if (first_block_in_line) {
+        printf("\n"); // blank line AFTER prompt, but only if we print a block
+        first_block_in_line = 0;
+      } else {
+        printf("\n"); // blank line BETWEEN character blocks
+      }
+
+      printed_any_block = 1;
 
       printf("You typed: '%c' (ASCII %d)\n", c, c);
 
