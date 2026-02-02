@@ -15,15 +15,29 @@ void ascii_stream_analyzer() {
       break;
     }
     printf("You typed: '%c' (ASCII %d)\n", c, c);
-    if (c >= 97 && c <= 122) {
+
+    if (c >= 'a' && c <= 'z') {
       printf("Class: Lowercase Letter\n");
-      c -= 32;
-      printf("Converted to: '%c'\n", c);
-    } else if (c >= 65 && c <= 90) {
+      printf("Converted to: '%c'\n", c - 32);
+
+    } else if (c >= 'A' && c <= 'Z') {
       printf("Class: Uppercase Letter\n");
-      c += 32;
-      printf("Converted to: '%c'\n", c);
+      printf("Converted to: '%c'\n", c + 32);
+
+    } else if (c >= '0' && c <= '9') {
+      printf("Class: Digit\n");
+      printf("No conversion done\n");
+
+    } else if (c >= 32 && c <= 126) {
+      printf("Class: Printable Symbol\n");
+      printf("No conversion done\n");
+
+    } else {
+      printf("Class: Non-printable or extended ASCII\n");
+      printf("No conversion done\n");
     }
+
+    printf("\n");
   } while (c != '#' && c != EOF);
 }
 
