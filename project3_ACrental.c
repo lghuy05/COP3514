@@ -3,71 +3,91 @@ Name: Yui Luong
 UID: U09663368
 
 Description:
-This program calculates the rental cost of air conditioners based on
-user selection and number of rental days. Charges are computed using
-arrays for first day rate, daily rate after first day, and weekly cap.
+This program calculates the rental charge for an AC unit based on:
+1) Selected AC type
+2) Number of rental days
+
+Rates are stored in three arrays:
+- First day rate
+- Daily rate after first day
+- Weekly maximum rate
+
+The program validates user input and applies weekly caps correctly.
 */
 
 #include <stdio.h>
 
-// Calculates total rental charge using rate arrays
-int charge(int selection, int days, int first_day[], int daily_after[],
-           int per_week[]) {
+/*
+Purpose:
+    Computes the rental cost using:
+    - Weekly maximum pricing
+    - First-day special rate
+    - Daily rate after first day
+Return:
+    Total rental charge
+*/
+int charge(int selection, int days, int firstDay[], int dailyRate[],
+           int weeklyMax[]) {
 
-  int index = selection - 1; // convert 1-4 to 0-3 index
+  int index = selection - 1; // Convert 1–4 selection into 0–3 index
+  int fullWeeks = days / 7;  // Number of complete weeks
+  int extraDays = days % 7;  // Remaining days after full weeks
 
-  int weeks = days / 7;
-  int remaining_days = days % 7;
+  int totalCost = fullWeeks * weeklyMax[index];
 
-  int total = weeks * per_week[index];
+  // Handle remaining days (if any)
+  if (extraDays > 0) {
 
-  if (remaining_days > 0) {
-    int partial;
+    int partialCost;
 
-    if (weeks == 0) {
-      // first day rate applies only if no full week
-      partial = first_day[index] + (remaining_days - 1) * daily_after[index];
+    // If no full week was rented, apply first-day rate
+    if (fullWeeks == 0) {
+      partialCost = firstDay[index] + (extraDays - 1) * dailyRate[index];
     } else {
-      partial = remaining_days * daily_after[index];
+      // If already charged weekly rate,
+      // remaining days use daily rate only
+      partialCost = extraDays * dailyRate[index];
     }
 
-    if (partial > per_week[index]) {
-      partial = per_week[index];
+    // Weekly maximum still applies to partial week
+    if (partialCost > weeklyMax[index]) {
+      partialCost = weeklyMax[index];
     }
 
-    total += partial;
+    totalCost += partialCost;
   }
 
-  return total;
+  return totalCost;
 }
 
 void ACrental() {
 
-  // Arrays required by project instructions
-  int first_day[4] = {50, 60, 80, 200};
-  int daily_after[4] = {30, 35, 50, 120};
-  int per_week[4] = {160, 200, 280, 550};
+  // Rate tables
+  int firstDay[4] = {50, 60, 80, 200};
+  int dailyRate[4] = {30, 35, 50, 120};
+  int weeklyMax[4] = {160, 200, 280, 550};
+
+  int selection;
+  int days;
 
   printf("Please select from four types of AC: 1, 2, 3, and 4\n");
   printf("Enter selection: ");
 
-  int selection;
   if (scanf("%d", &selection) != 1 || selection < 1 || selection > 4) {
-    printf("Invalid selection. Select from 1 to 4.");
+    printf("Invalid selection. Select from 1 to 4.\n");
     return;
   }
 
   printf("Enter days:");
-  int days;
 
   if (scanf("%d", &days) != 1 || days < 0) {
-    printf("Invalid days.");
+    printf("Invalid days.\n");
     return;
   }
 
-  int total = charge(selection, days, first_day, daily_after, per_week);
+  int total = charge(selection, days, firstDay, dailyRate, weeklyMax);
 
-  printf("Charge($): %d", total);
+  printf("Charge($): %d\n", total);
 }
 
 int main() {
