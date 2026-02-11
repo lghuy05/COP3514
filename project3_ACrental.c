@@ -49,7 +49,7 @@ void ACrental() {
   int per_week[4] = {160, 200, 280, 550};
 
   printf("Please select from four types of AC: 1, 2, 3, and 4\n");
-  printf("Enter selection:");
+  printf("Enter selection: ");
 
   int selection;
   if (scanf("%d", &selection) != 1 || selection < 1 || selection > 4) {
