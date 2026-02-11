@@ -28,7 +28,7 @@ int main() {
 
   int missing = search(counselors, n);
 
-  printf("Counselor has not been assigned: %d\n", missing);
+  printf("Counselor has not been assigned: %d", missing);
 
   return 0;
 }
