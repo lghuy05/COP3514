@@ -67,7 +67,7 @@ void ACrental() {
 
   int total = charge(selection, days, first_day, daily_after, per_week);
 
-  printf("Charge($): %d\n", total);
+  printf("Charge($): %d", total);
 }
 
 int main() {
