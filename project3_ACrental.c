@@ -12,7 +12,6 @@ Rates are stored in three arrays:
 - Daily rate after first day
 - Weekly maximum rate
 
-The program validates user input and applies weekly caps correctly.
 */
 
 #include <stdio.h>
@@ -35,7 +34,7 @@ int charge(int selection, int days, int firstDay[], int dailyRate[],
 
   int totalCost = fullWeeks * weeklyMax[index];
 
-  // Handle remaining days (if any)
+  // Handle remaining days
   if (extraDays > 0) {
 
     int partialCost;

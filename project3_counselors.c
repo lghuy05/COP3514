@@ -4,27 +4,26 @@ UID: U09663368
 
 Description:
 This program finds the counselor that has not been assigned
-to a summer camp program.
+to a summer camp program
 
-Counselors are numbered from 1 to n.
-All counselors except one have already been assigned.
+Counselors are numbered from 1 to n
+All counselors except one have already been assigned
 
-The program uses a helper function (search) to determine
-which counselor number is missing.
+The program uses a helper function "search" to determine
+which counselor number is missing
 */
 
 #include <stdio.h>
 
 /*
-Purpose:
-    Finds the missing counselor number.
+Finds the missing counselor number
 Logic:
     The total sum of numbers from 1 to n is:
         n(n + 1) / 2 (math formula of sum)
 
     If we subtract the sum of assigned counselors
     from the total expected sum,
-    the difference is the missing counselor.
+    the difference is the missing counselor
 
 Returns:
     The counselor number that has not been assigned
