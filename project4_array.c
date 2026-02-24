@@ -1,5 +1,15 @@
+/*
+Name: Yui Luong
+UID: U09663368
+Description:
+Read two arrays and create a third array that contains all elements from the
+first array, then append any elements from the second array that are not
+already present. Output the resulting array and its size.
+*/
+
 #include <stdio.h>
 
+// Copy all of a into c, then append unique values from b. Return new size.
 int find_elements(int *a, int n1, int *b, int n2, int *c) {
   int count = 0;
 
@@ -8,7 +18,7 @@ int find_elements(int *a, int n1, int *b, int n2, int *c) {
 
   while (pa < a + n1) {
     *pc = *pa;
-    pc++;
+    pc++; // move output pointer forward
     pa++;
     count++;
   }
@@ -18,6 +28,7 @@ int find_elements(int *a, int n1, int *b, int n2, int *c) {
     int exists = 0;
     int *check = c;
 
+    // Scan current output to see if *pb is already included.
     while (check < c + count) {
       if (*check == *pb) {
         exists = 1;
@@ -27,7 +38,7 @@ int find_elements(int *a, int n1, int *b, int n2, int *c) {
     }
     if (!exists) {
       *pc = *pb;
-      pc++;
+      pc++; // append unique value
       count++;
     }
     pb++;
