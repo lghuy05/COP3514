@@ -38,7 +38,7 @@ int find_elements(int *a, int n1, int *b, int n2, int *c) {
 int main() {
   int n1, n2;
 
-  printf("Enter length of the first array: ");
+  printf("Enter the length of the first array: ");
   scanf("%d", &n1);
 
   int a[n1];
@@ -46,7 +46,7 @@ int main() {
   for (int i = 0; i < n1; i++)
     scanf("%d", &a[i]);
 
-  printf("Enter length of the second array: ");
+  printf("Enter the length of the second array: ");
   scanf("%d", &n2);
   int b[n2];
   printf("Enter elements in the second array: ");
