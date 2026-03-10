@@ -1,3 +1,6 @@
+// Name: Yui Luong
+// UID: U09663368
+
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
