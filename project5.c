@@ -1,6 +1,28 @@
 // Name: Yui Luong
 // UID: U09663368
 
+// Program: Command Line Word Replacement
+//
+// Description:
+// This program replaces every occurrence of a given word in a sentence
+// with another word of the same length. The program can run in two modes:
+//
+// 1. Command-line mode:
+//    ./a.out "sentence here" word replacement
+//
+// 2. Interactive mode:
+//    If no command line arguments are provided, the user will be prompted
+//    to enter the sentence, the word to replace, and the replacement word.
+//
+// The program uses pointer-based string manipulation to:
+// - measure string length
+// - copy strings
+// - detect whether a word occurs at a given position
+// - overwrite words in place
+//
+// Standard string library functions (like those in <string.h>) are not used.
+// Instead, all string operations are implemented manually using pointers.
+//
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -8,6 +30,11 @@
 
 #define MAX_STRING_LEN 50
 
+// Copies the string from 'source' to 'destination' using pointer iteration.
+// The destination buffer is assumed to have enough allocated space.
+// If either pointer is NULL, the function returns without doing anything.
+// The function also checks that the string length does not exceed
+// MAX_STRING_LEN to prevent scanning infinitely if '\0' is missing.
 void my_strcpy(char *destination, char *source) {
   if (destination == NULL || source == NULL)
     return;
@@ -29,6 +56,12 @@ void my_strcpy(char *destination, char *source) {
   *dest = '\0';
 }
 
+// my_strlen
+// Calculates the length of a string using pointer traversal.
+// The length returned does not include the null terminator '\0'.
+// If the pointer is NULL, the function returns 0.
+// If more than MAX_STRING_LEN characters are scanned without
+// encountering '\0', the program prints an error and exits.
 size_t my_strlen(const char *s) {
   if (s == NULL)
     return 0;
@@ -46,6 +79,11 @@ size_t my_strlen(const char *s) {
   return ptr - start;
 }
 
+// Determines whether the string 'sentence' begins with the string 'word'
+// starting at the given memory location.
+// The comparison is done character by character using pointers.
+// Returns true if the characters match for the entire length of 'word',
+// otherwise returns false.
 bool starts_with_word(char *sentence, char *word) {
   if (sentence == NULL || word == NULL)
     return false;
@@ -66,6 +104,10 @@ bool starts_with_word(char *sentence, char *word) {
   return true;
 }
 
+// Replaces characters starting at the address 'start' with the characters
+// from the string 'replacement'. The function only performs the overwrite
+// if the remaining portion of 'start' is long enough to contain the
+// replacement word. Returns true if the overwrite occurs, otherwise false.
 bool overwrite_with_word(char *start, char *replacement) {
   if (start == NULL || replacement == NULL)
     return false;
@@ -86,6 +128,11 @@ bool overwrite_with_word(char *start, char *replacement) {
   return true;
 }
 
+// Scans the sentence and replaces every occurrence of 'word' with
+// 'replacement'. A valid word occurrence must be surrounded by spaces
+// or string boundaries so that partial matches inside other words
+// are not replaced. The function uses the helper functions
+// starts_with_word() and overwrite_with_word() to perform the replacement.
 void overwrite_all_words(char *sentence, char *word, char *replacement) {
   if (sentence == NULL || word == NULL || replacement == NULL) {
     printf("Unable to find end of string or string too long\n");
