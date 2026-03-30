@@ -1,10 +1,13 @@
 /*
 Name: Yui Luong
 UID: U09663368
+
 Description:
-Given an input array, create an output array by summing the first and last
-elements, the second and second-to-last elements, and so on. If the input
-array has an odd length, copy the middle element as the last output value.
+This program reads an input text file and splits its contents into multiple
+output files. The second command-line argument determines how many complete
+lines should be written to each chunk file. Output files are named
+1.chunk.txt, 2.chunk.txt, and so on. The program preserves full lines even
+when a line is read in multiple fixed-size buffer reads.
 */
 
 #include <stdio.h>
@@ -15,6 +18,18 @@ array has an odd length, copy the middle element as the last output value.
 #define READ_CHUNK_SIZE 30
 
 int main(int argc, char *argv[]) {
+  /*
+  Function logic:
+  1. Validate the command-line arguments and ensure the requested chunk size
+     is a positive integer.
+  2. Open the input file for reading.
+  3. Read the file a small buffer at a time and write each buffer into the
+     current output chunk file.
+  4. Count completed lines by checking for newline characters, and once the
+     requested number of full lines has been written, close the current chunk
+     file and start the next one.
+  5. Close any open files before exiting.
+  */
 
   if (argc != 3) {
     printf("Usage: ./a.out <input filename> <output file size>\n");
@@ -42,8 +57,7 @@ int main(int argc, char *argv[]) {
   int file_index = 1;
 
   while (fgets(buffer, READ_CHUNK_SIZE, input) != NULL) {
-
-    // Create new file if needed
+    // Open a new chunk file before writing the first data for that chunk.
     if (line_count == 0 && output == NULL) {
       snprintf(filename, MAX_SIZE_FILENAME, "%d.chunk.txt", file_index);
 
@@ -57,11 +71,11 @@ int main(int argc, char *argv[]) {
 
     fputs(buffer, output);
 
-    // Check if FULL line finished
+    // A line is only counted after its newline character has been read.
     if (strchr(buffer, '\n') != NULL) {
       line_count++;
 
-      // Only switch AFTER finishing line
+      // Start a new output file only after the full line limit is reached.
       if (line_count == chunk_size) {
         fclose(output);
         output = NULL;
