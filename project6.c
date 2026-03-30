@@ -9,18 +9,20 @@ array has an odd length, copy the middle element as the last output value.
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MAX_SIZE_FILENAME 64
 #define READ_CHUNK_SIZE 30
 
 int main(int argc, char *argv[]) {
-  // 1. Check arguments
+
+  // 1. Check number of arguments
   if (argc != 3) {
     printf("Usage: ./a.out <input filename> <output file size>\n");
     return 1;
   }
 
-  // 2. Convert chunk size
+  // 2. Validate chunk size
   int chunk_size = atoi(argv[2]);
   if (chunk_size <= 0) {
     printf("Error: 2nd argument must be a positive integer.\n");
@@ -35,15 +37,16 @@ int main(int argc, char *argv[]) {
   }
 
   char buffer[READ_CHUNK_SIZE];
+  char filename[MAX_SIZE_FILENAME];
+
+  FILE *output = NULL;
+
   int line_count = 0;
   int file_index = 1;
 
-  FILE *output = NULL;
-  char filename[MAX_SIZE_FILENAME];
-
   while (fgets(buffer, READ_CHUNK_SIZE, input) != NULL) {
 
-    // Create new file if needed
+    // Create new output file when starting a new chunk
     if (line_count == 0) {
       snprintf(filename, MAX_SIZE_FILENAME, "%d.chunk.txt", file_index);
 
@@ -55,11 +58,15 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    // Write line
+    // Write buffer content
     fputs(buffer, output);
-    line_count++;
 
-    // If reached chunk size → close and reset
+    // ONLY count line if actual newline found
+    if (strchr(buffer, '\n') != NULL) {
+      line_count++;
+    }
+
+    // If chunk full → move to next file
     if (line_count == chunk_size) {
       fclose(output);
       output = NULL;
