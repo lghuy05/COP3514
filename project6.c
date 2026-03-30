@@ -16,20 +16,17 @@ array has an odd length, copy the middle element as the last output value.
 
 int main(int argc, char *argv[]) {
 
-  // 1. Check number of arguments
   if (argc != 3) {
     printf("Usage: ./a.out <input filename> <output file size>\n");
     return 1;
   }
 
-  // 2. Validate chunk size
   int chunk_size = atoi(argv[2]);
   if (chunk_size <= 0) {
     printf("Error: 2nd argument must be a positive integer.\n");
     return 2;
   }
 
-  // 3. Open input file
   FILE *input = fopen(argv[1], "r");
   if (input == NULL) {
     printf("Error opening input file '%s'\n", argv[1]);
@@ -46,8 +43,8 @@ int main(int argc, char *argv[]) {
 
   while (fgets(buffer, READ_CHUNK_SIZE, input) != NULL) {
 
-    // Create new output file when starting a new chunk
-    if (line_count == 0) {
+    // Create new file if needed
+    if (line_count == 0 && output == NULL) {
       snprintf(filename, MAX_SIZE_FILENAME, "%d.chunk.txt", file_index);
 
       output = fopen(filename, "w");
@@ -58,24 +55,22 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    // Write buffer content
     fputs(buffer, output);
 
-    // ONLY count line if actual newline found
+    // Check if FULL line finished
     if (strchr(buffer, '\n') != NULL) {
       line_count++;
-    }
 
-    // If chunk full → move to next file
-    if (line_count == chunk_size) {
-      fclose(output);
-      output = NULL;
-      file_index++;
-      line_count = 0;
+      // Only switch AFTER finishing line
+      if (line_count == chunk_size) {
+        fclose(output);
+        output = NULL;
+        file_index++;
+        line_count = 0;
+      }
     }
   }
 
-  // Close last file if still open
   if (output != NULL) {
     fclose(output);
   }
