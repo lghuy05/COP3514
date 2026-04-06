@@ -1,7 +1,10 @@
 // UID: U09663368
 // Program description:
+// This program reads customer records from customers.csv, where each record
+// contains an email address, a purchase count, and a customer name. The user
+// enters a minimum purchase threshold, and the program copies every customer
+// whose purchase count is greater than that value into result.csv.
 #include <stdio.h>
-#include <stdlib.h>
 
 #define MAX 1000
 
@@ -11,6 +14,8 @@ struct customer {
   char name[101];
 };
 
+// Copies customers with purchases greater than num into result and returns
+// how many matching customers were found.
 int search(struct customer list[], int n, int num, struct customer result[]) {
   int count = 0;
   for (int i = 0; i < n; i++) {
@@ -34,21 +39,23 @@ int main() {
   struct customer list[MAX];
   struct customer result[MAX];
 
+  // n stores the number of customer records successfully read from the file.
   int n = 0;
 
-  // Read file
+  // Read each CSV row into the customer list until there is no complete record.
   while (fscanf(infile, "%[^,],%d,%[^\n]\n", list[n].email, &list[n].purchases,
                 list[n].name) == 3) {
     n++;
   }
 
+  // num is the user-provided purchase threshold.
   int num;
   printf("Enter number of purchases: ");
   scanf("%d", &num);
 
   int found = search(list, n, num, result);
 
-  // Write to output file
+  // Write only the matching customers to the output file.
   for (int i = 0; i < found; i++) {
     fprintf(outfile, "%s, %d, %s\n", result[i].email, result[i].purchases,
             result[i].name);
