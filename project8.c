@@ -2,6 +2,13 @@
 // UID: 09663368
 //
 // DESCRIPTION:
+// This program implements a simple Reverse Polish Notation (RPN) calculator
+// using a singly linked list. Each valid integer entered by the user is added
+// to the end of the list and acts like a value on the calculator stack. When
+// the user enters an operator, the program removes the last two values,
+// performs the requested calculation, and stores the result back in the list.
+// The calculator continues until the user enters "exit", then all allocated
+// memory is released before the program ends.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -22,6 +29,7 @@ int parse_int_strict(const char *s, int *out) {
   if (s == NULL || out == NULL || strlen(s) == 0)
     return 0;
 
+  // strtol lets us verify that the whole token is a valid integer.
   val = strtol(s, &endptr, 10);
 
   if (*endptr != '\0')
@@ -37,7 +45,7 @@ int is_operator(const char *s) {
   return (s[0] == '+' || s[0] == '-' || s[0] == '*' || s[0] == '/');
 }
 
-/* ===== Linked list functions ===== */
+/* Linked list functions */
 
 Node *add_end(Node *head, int value) {
   Node *new_node = malloc(sizeof(Node));
@@ -50,6 +58,7 @@ Node *add_end(Node *head, int value) {
   if (head == NULL)
     return new_node;
 
+  // Walk to the tail so the newest value behaves like the top of the stack.
   Node *curr = head;
   while (curr->next != NULL)
     curr = curr->next;
@@ -73,6 +82,7 @@ Node *remove_last(Node *head, int *out) {
     return NULL;
   }
 
+  // Keep track of the node before the tail so we can detach the last item.
   Node *prev = NULL;
   Node *curr = head;
 
@@ -111,6 +121,7 @@ void clear_list(Node **head) {
 
   Node *curr = *head;
   while (curr != NULL) {
+    // Free one node at a time to avoid leaving allocated memory behind.
     Node *tmp = curr;
     curr = curr->next;
     free(tmp);
@@ -119,7 +130,7 @@ void clear_list(Node **head) {
   *head = NULL;
 }
 
-/* ===== Helper ===== */
+/* Helper */
 
 int list_size(Node *head) {
   int count = 0;
@@ -130,7 +141,7 @@ int list_size(Node *head) {
   return count;
 }
 
-/* ===== MAIN ===== */
+/* MAIN */
 
 int main(void) {
   Node *head = NULL;
@@ -145,12 +156,13 @@ int main(void) {
     if (scanf("%1023s", input) != 1)
       break;
 
+    // Clear the rest of the line so each loop handles one clean token.
     while ((c = getchar()) != '\n' && c != EOF)
       ;
 
     if (strcmp(input, "exit") == 0) {
       printf("\n");
-      break; // ✅ FIX: no extra prompt here
+      break;
     }
 
     int value;
@@ -167,6 +179,7 @@ int main(void) {
 
       int right, left, result;
 
+      // The most recently entered value is used first, matching RPN rules.
       head = remove_last(head, &right);
       head = remove_last(head, &left);
 
