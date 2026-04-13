@@ -1,5 +1,5 @@
 // Yui Luong
-// UID: 09663368
+// UID: U09663368
 //
 // DESCRIPTION:
 // This program implements a simple Reverse Polish Notation (RPN) calculator
