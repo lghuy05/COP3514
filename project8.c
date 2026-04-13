@@ -37,7 +37,7 @@ int is_operator(const char *s) {
   return (s[0] == '+' || s[0] == '-' || s[0] == '*' || s[0] == '/');
 }
 
-/* ===== Required functions ===== */
+/* ===== Linked list functions ===== */
 
 Node *add_end(Node *head, int value) {
   Node *new_node = malloc(sizeof(Node));
@@ -150,8 +150,7 @@ int main(void) {
 
     if (strcmp(input, "exit") == 0) {
       printf("\n");
-      printf("Enter an operand or operator: \n");
-      break;
+      break; // ✅ FIX: no extra prompt here
     }
 
     int value;
