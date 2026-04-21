@@ -48,8 +48,8 @@ int main() {
       break;
     }
 
-    /* 🔥 CRITICAL FIX: newline after each operation */
-    printf("\n");
+    // /* 🔥 CRITICAL FIX: newline after each operation */
+    // printf("\n");
   }
 
   return 0;
