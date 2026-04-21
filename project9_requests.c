@@ -16,7 +16,7 @@ typedef struct book {
   struct book *next;
 } book;
 
-/* ---------- FUNCTION PROTOTYPES ---------- */
+/* ---------- PROTOTYPES ---------- */
 book *add_to_ordered_list(book *head);
 book *delete_from_list(book *head);
 void print_list(book *head);
@@ -28,6 +28,10 @@ int main() {
   book *head = NULL;
   char op;
 
+  /* REQUIRED intro line */
+  printf("Operation Code: a for adding to the list, d for deleting a book, p "
+         "for printing the list; q for quit.\n");
+
   while (1) {
     printf("Enter operation code: ");
     scanf(" %c", &op);
@@ -38,6 +42,7 @@ int main() {
     } else if (op == 'd') {
       head = delete_from_list(head);
     } else if (op == 'p') {
+      printf("\n"); // REQUIRED blank line before table
       print_list(head);
     } else if (op == 'q') {
       clear_list(head);
@@ -48,7 +53,7 @@ int main() {
   return 0;
 }
 
-/* ---------- ADD BOOK ---------- */
+/* ---------- ADD ---------- */
 book *add_to_ordered_list(book *head) {
   char title[TITLE_LEN], first[NAME_LEN], last[NAME_LEN];
 
@@ -61,23 +66,21 @@ book *add_to_ordered_list(book *head) {
   printf("Enter author's last name: ");
   read_line(last, NAME_LEN);
 
-  /* Check duplicate */
+  /* check duplicate */
   book *cur = head;
   while (cur != NULL) {
     if (strcmp(cur->title, title) == 0 && strcmp(cur->first, first) == 0 &&
         strcmp(cur->last, last) == 0) {
-      printf("book already exists\n");
+      printf("book already exists\n\n");
       return head;
     }
     cur = cur->next;
   }
 
-  /* Create node */
+  /* create node */
   book *newNode = (book *)malloc(sizeof(book));
-  if (!newNode) {
-    printf("Memory allocation failed\n");
+  if (!newNode)
     exit(1);
-  }
 
   strcpy(newNode->title, title);
   strcpy(newNode->first, first);
@@ -86,13 +89,13 @@ book *add_to_ordered_list(book *head) {
   printf("Enter book's price: ");
   scanf("%lf", &newNode->price);
 
-  printf("Enter number of requests: ");
+  printf("Enter the number of requests: ");
   scanf("%d", &newNode->requests);
   getchar();
 
   newNode->next = NULL;
 
-  /* Insert sorted */
+  /* insert sorted */
   if (head == NULL)
     return newNode;
 
@@ -120,17 +123,17 @@ book *add_to_ordered_list(book *head) {
   }
 }
 
-/* ---------- DELETE BOOK ---------- */
+/* ---------- DELETE ---------- */
 book *delete_from_list(book *head) {
   char title[TITLE_LEN], first[NAME_LEN], last[NAME_LEN];
 
-  printf("Enter book title: ");
+  printf("Enter title: ");
   read_line(title, TITLE_LEN);
 
-  printf("Enter author's first name: ");
+  printf("Enter author first name: ");
   read_line(first, NAME_LEN);
 
-  printf("Enter author's last name: ");
+  printf("Enter author last name: ");
   read_line(last, NAME_LEN);
 
   book *cur = head;
@@ -147,7 +150,7 @@ book *delete_from_list(book *head) {
       }
 
       free(cur);
-      printf("book deleted\n");
+      printf("book deleted\n\n");
       return head;
     }
 
@@ -155,22 +158,24 @@ book *delete_from_list(book *head) {
     cur = cur->next;
   }
 
-  printf("book not found\n");
+  printf("book does not exit\n\n");
   return head;
 }
 
-/* ---------- PRINT LIST ---------- */
+/* ---------- PRINT ---------- */
 void print_list(book *head) {
-  printf("Title First Name Last Name Requests Price\n");
+  printf("Title\t\t\t\t\tFirst Name\tLast Name\tRequests  Price\n");
 
   while (head != NULL) {
-    printf("%s %s %s %d %.2f\n", head->title, head->first, head->last,
-           head->requests, head->price);
+    printf("%-40s %-15s %-15s %5d %8.2f\n", head->title, head->first,
+           head->last, head->requests, head->price);
     head = head->next;
   }
+
+  printf("\n");
 }
 
-/* ---------- CLEAR LIST ---------- */
+/* ---------- CLEAR ---------- */
 void clear_list(book *head) {
   book *temp;
   while (head != NULL) {
@@ -185,9 +190,8 @@ void read_line(char str[], int n) {
   int ch, i = 0;
 
   while ((ch = getchar()) != '\n' && ch != EOF) {
-    if (i < n - 1) {
+    if (i < n - 1)
       str[i++] = ch;
-    }
   }
   str[i] = '\0';
 }
