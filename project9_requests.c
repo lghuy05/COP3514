@@ -28,26 +28,28 @@ int main() {
   book *head = NULL;
   char op;
 
-  /* REQUIRED intro line */
   printf("Operation Code: a for adding to the list, d for deleting a book, p "
          "for printing the list; q for quit.\n");
 
   while (1) {
     printf("Enter operation code: ");
     scanf(" %c", &op);
-    getchar(); // consume newline
+    getchar();
 
     if (op == 'a') {
       head = add_to_ordered_list(head);
     } else if (op == 'd') {
       head = delete_from_list(head);
     } else if (op == 'p') {
-      printf("\n"); // REQUIRED blank line before table
+      printf("\n");
       print_list(head);
     } else if (op == 'q') {
       clear_list(head);
       break;
     }
+
+    /* 🔥 CRITICAL FIX: newline after each operation */
+    printf("\n");
   }
 
   return 0;
@@ -66,19 +68,17 @@ book *add_to_ordered_list(book *head) {
   printf("Enter author's last name: ");
   read_line(last, NAME_LEN);
 
-  /* check duplicate */
   book *cur = head;
   while (cur != NULL) {
     if (strcmp(cur->title, title) == 0 && strcmp(cur->first, first) == 0 &&
         strcmp(cur->last, last) == 0) {
-      printf("book already exists\n\n");
+      printf("book already exists\n");
       return head;
     }
     cur = cur->next;
   }
 
-  /* create node */
-  book *newNode = (book *)malloc(sizeof(book));
+  book *newNode = malloc(sizeof(book));
   if (!newNode)
     exit(1);
 
@@ -95,7 +95,6 @@ book *add_to_ordered_list(book *head) {
 
   newNode->next = NULL;
 
-  /* insert sorted */
   if (head == NULL)
     return newNode;
 
@@ -143,14 +142,13 @@ book *delete_from_list(book *head) {
     if (strcmp(cur->title, title) == 0 && strcmp(cur->first, first) == 0 &&
         strcmp(cur->last, last) == 0) {
 
-      if (prev == NULL) {
+      if (prev == NULL)
         head = cur->next;
-      } else {
+      else
         prev->next = cur->next;
-      }
 
       free(cur);
-      printf("book deleted\n\n");
+      printf("book deleted\n");
       return head;
     }
 
@@ -158,7 +156,7 @@ book *delete_from_list(book *head) {
     cur = cur->next;
   }
 
-  printf("book does not exit\n\n");
+  printf("book does not exit\n");
   return head;
 }
 
