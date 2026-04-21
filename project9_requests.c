@@ -47,9 +47,6 @@ int main() {
       clear_list(head);
       break;
     }
-
-    // /* 🔥 CRITICAL FIX: newline after each operation */
-    // printf("\n");
   }
 
   return 0;
@@ -72,7 +69,7 @@ book *add_to_ordered_list(book *head) {
   while (cur != NULL) {
     if (strcmp(cur->title, title) == 0 && strcmp(cur->first, first) == 0 &&
         strcmp(cur->last, last) == 0) {
-      printf("book already exists\n");
+      printf("book already exists\n\n");
       return head;
     }
     cur = cur->next;
@@ -95,29 +92,30 @@ book *add_to_ordered_list(book *head) {
 
   newNode->next = NULL;
 
-  if (head == NULL)
+  if (head == NULL) {
+    printf("\n");
     return newNode;
+  }
 
   book *prev = NULL;
   cur = head;
 
   while (cur != NULL) {
     int cmp = strcmp(newNode->last, cur->last);
-
-    if (cmp < 0 || (cmp == 0 && strcmp(newNode->first, cur->first) < 0)) {
+    if (cmp < 0 || (cmp == 0 && strcmp(newNode->first, cur->first) < 0))
       break;
-    }
-
     prev = cur;
     cur = cur->next;
   }
 
   if (prev == NULL) {
     newNode->next = head;
+    printf("\n");
     return newNode;
   } else {
     prev->next = newNode;
     newNode->next = cur;
+    printf("\n");
     return head;
   }
 }
@@ -148,7 +146,7 @@ book *delete_from_list(book *head) {
         prev->next = cur->next;
 
       free(cur);
-      printf("book deleted\n");
+      printf("book deleted\n\n");
       return head;
     }
 
@@ -156,7 +154,7 @@ book *delete_from_list(book *head) {
     cur = cur->next;
   }
 
-  printf("book does not exit\n");
+  printf("book does not exit\n\n");
   return head;
 }
 
@@ -186,7 +184,6 @@ void clear_list(book *head) {
 /* ---------- READ LINE ---------- */
 void read_line(char str[], int n) {
   int ch, i = 0;
-
   while ((ch = getchar()) != '\n' && ch != EOF) {
     if (i < n - 1)
       str[i++] = ch;
