@@ -1,5 +1,8 @@
 // Yui Luong
 // UID: U09663368
+// Description: This program keeps a linked list of book requests. The user can
+// add a book, delete a book, print the current list, or quit. Books are stored
+// in order by the author's last name, then first name.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,14 +19,13 @@ typedef struct book {
   struct book *next;
 } book;
 
-/* ---------- PROTOTYPES ---------- */
+// PROTOTYPES
 book *add_to_ordered_list(book *head);
 book *delete_from_list(book *head);
 void print_list(book *head);
 void clear_list(book *head);
 void read_line(char str[], int n);
 
-/* ---------- MAIN ---------- */
 int main() {
   book *head = NULL;
   char op;
@@ -52,7 +54,10 @@ int main() {
   return 0;
 }
 
-/* ---------- ADD ---------- */
+/*
+ * Adds a new book to the list in author name order.
+ * If the same title and author are already in the list, the list is unchanged.
+ */
 book *add_to_ordered_list(book *head) {
   char title[TITLE_LEN], first[NAME_LEN], last[NAME_LEN];
 
@@ -65,6 +70,7 @@ book *add_to_ordered_list(book *head) {
   printf("Enter author's last name: ");
   read_line(last, NAME_LEN);
 
+  /* Check for a duplicate before asking for the rest of the book data. */
   book *cur = head;
   while (cur != NULL) {
     if (strcmp(cur->title, title) == 0 && strcmp(cur->first, first) == 0 &&
@@ -75,52 +81,57 @@ book *add_to_ordered_list(book *head) {
     cur = cur->next;
   }
 
-  book *newNode = malloc(sizeof(book));
-  if (!newNode)
+  book *new_node = malloc(sizeof(book));
+  if (!new_node)
     exit(1);
 
-  strcpy(newNode->title, title);
-  strcpy(newNode->first, first);
-  strcpy(newNode->last, last);
+  strcpy(new_node->title, title);
+  strcpy(new_node->first, first);
+  strcpy(new_node->last, last);
 
   printf("Enter book's price: ");
-  scanf("%lf", &newNode->price);
+  scanf("%lf", &new_node->price);
 
   printf("Enter the number of requests: ");
-  scanf("%d", &newNode->requests);
+  scanf("%d", &new_node->requests);
   getchar();
 
-  newNode->next = NULL;
+  new_node->next = NULL;
 
   if (head == NULL) {
     printf("\n");
-    return newNode;
+    return new_node;
   }
 
   book *prev = NULL;
   cur = head;
 
+  /* Stop when the new book belongs before the current book. */
   while (cur != NULL) {
-    int cmp = strcmp(newNode->last, cur->last);
-    if (cmp < 0 || (cmp == 0 && strcmp(newNode->first, cur->first) < 0))
+    int cmp = strcmp(new_node->last, cur->last);
+    if (cmp < 0 || (cmp == 0 && strcmp(new_node->first, cur->first) < 0))
       break;
     prev = cur;
     cur = cur->next;
   }
 
+  /* Insert at the front when the new book comes before the old head. */
   if (prev == NULL) {
-    newNode->next = head;
+    new_node->next = head;
     printf("\n");
-    return newNode;
+    return new_node;
   } else {
-    prev->next = newNode;
-    newNode->next = cur;
+    prev->next = new_node;
+    new_node->next = cur;
     printf("\n");
     return head;
   }
 }
 
-/* ---------- DELETE ---------- */
+/*
+ * Deletes the book that matches the entered title and author.
+ * Returns the possibly changed head pointer.
+ */
 book *delete_from_list(book *head) {
   char title[TITLE_LEN], first[NAME_LEN], last[NAME_LEN];
 
@@ -136,10 +147,12 @@ book *delete_from_list(book *head) {
   book *cur = head;
   book *prev = NULL;
 
+  /* Keep prev one node behind cur so the matching node can be unlinked. */
   while (cur != NULL) {
     if (strcmp(cur->title, title) == 0 && strcmp(cur->first, first) == 0 &&
         strcmp(cur->last, last) == 0) {
 
+      /* Deleting the first node changes the head pointer. */
       if (prev == NULL)
         head = cur->next;
       else
@@ -158,7 +171,7 @@ book *delete_from_list(book *head) {
   return head;
 }
 
-/* ---------- PRINT ---------- */
+/* Prints all books in the list using columns for easier reading. */
 void print_list(book *head) {
   printf("Title\t\t\t\t\tFirst Name\tLast Name\tRequests  Price\n");
 
@@ -171,7 +184,7 @@ void print_list(book *head) {
   printf("\n");
 }
 
-/* ---------- CLEAR ---------- */
+/* Frees every node before the program exits. */
 void clear_list(book *head) {
   book *temp;
   while (head != NULL) {
@@ -181,7 +194,7 @@ void clear_list(book *head) {
   }
 }
 
-/* ---------- READ LINE ---------- */
+/* Reads a line of input and leaves room for the null character. */
 void read_line(char str[], int n) {
   int ch, i = 0;
   while ((ch = getchar()) != '\n' && ch != EOF) {
