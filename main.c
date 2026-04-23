@@ -1,3 +1,5 @@
+// UID: 09663368
+// Name: Yui Luong
 /*
     This program allows the user to select a sequence of string transformation
     functions from a predefined library and apply them to an input string.
