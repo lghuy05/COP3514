@@ -32,7 +32,7 @@ book *add_to_ordered_list(book *head) {
     cur = cur->next;
   }
 
-  book *new_node = malloc(sizeof(book));
+  book *new_node = calloc(1, sizeof(book));
   if (!new_node)
     exit(1);
 
@@ -45,7 +45,6 @@ book *add_to_ordered_list(book *head) {
 
   printf("Enter the number of requests: ");
   scanf("%d", &new_node->requests);
-  getchar();
 
   new_node->next = NULL;
 
@@ -118,7 +117,7 @@ book *delete_from_list(book *head) {
     cur = cur->next;
   }
 
-  printf("book does not exit\n\n");
+  printf("book does not exist\n\n");
   return head;
 }
 
@@ -127,8 +126,8 @@ void print_list(book *head) {
   printf("Title\t\t\t\t\tFirst Name\tLast Name\tRequests  Price\n");
 
   while (head != NULL) {
-    printf("%-40s %-15s %-15s %5d %8.2f\n", head->title, head->first,
-           head->last, head->requests, head->price);
+    printf("%-40s%-16s%-21s%d%10.2f\n", head->title, head->first, head->last,
+           head->requests, head->price);
     head = head->next;
   }
 

@@ -10,6 +10,7 @@
 int main() {
   book *head = NULL;
   char op;
+  int ch;
 
   printf("Operation Code: a for adding to the list, d for deleting a book, p "
          "for printing the list; q for quit.\n");
@@ -17,7 +18,8 @@ int main() {
   while (1) {
     printf("Enter operation code: ");
     scanf(" %c", &op);
-    getchar();
+    while ((ch = getchar()) != '\n' && ch != EOF)
+      ;
 
     if (op == 'a') {
       head = add_to_ordered_list(head);
@@ -29,6 +31,8 @@ int main() {
     } else if (op == 'q') {
       clear_list(head);
       break;
+    } else {
+      printf("Illegal code\n\n");
     }
   }
 
