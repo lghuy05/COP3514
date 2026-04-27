@@ -7,6 +7,7 @@
 
 #include "book.h"
 
+/* Repeatedly reads an operation code and performs the requested action. */
 int main() {
   book *head = NULL;
   char op;

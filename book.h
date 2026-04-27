@@ -1,3 +1,6 @@
+// Yui Luong
+// UID: U09663368
+// Description: Declarations for the linked list of book requests.
 #ifndef BOOK_H
 #define BOOK_H
 

@@ -1,3 +1,7 @@
+// Yui Luong
+// UID: U09663368
+// Description: Functions for adding, deleting, printing, and freeing the
+// linked list of book requests.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,10 +9,7 @@
 #include "book.h"
 #include "read_line.h"
 
-/*
- * Adds a new book to the list in author name order.
- * If the same title and author are already in the list, the list is unchanged.
- */
+/* Adds a book to the list in alphabetical order by author. */
 book *add_to_ordered_list(book *head) {
   char title[TITLE_LEN], first[NAME_LEN], last[NAME_LEN];
 
@@ -21,7 +22,6 @@ book *add_to_ordered_list(book *head) {
   printf("Enter author's last name: ");
   read_line(last, NAME_LEN);
 
-  /* Check for a duplicate before asking for the rest of the book data. */
   book *cur = head;
   while (cur != NULL) {
     if (strcmp(cur->title, title) == 0 && strcmp(cur->first, first) == 0 &&
@@ -56,7 +56,6 @@ book *add_to_ordered_list(book *head) {
   book *prev = NULL;
   cur = head;
 
-  /* Stop when the new book belongs before the current book. */
   while (cur != NULL) {
     int cmp = strcmp(new_node->last, cur->last);
     if (cmp < 0 || (cmp == 0 && strcmp(new_node->first, cur->first) < 0))
@@ -65,23 +64,19 @@ book *add_to_ordered_list(book *head) {
     cur = cur->next;
   }
 
-  /* Insert at the front when the new book comes before the old head. */
   if (prev == NULL) {
     new_node->next = head;
     printf("\n");
     return new_node;
-  } else {
-    prev->next = new_node;
-    new_node->next = cur;
-    printf("\n");
-    return head;
   }
+
+  prev->next = new_node;
+  new_node->next = cur;
+  printf("\n");
+  return head;
 }
 
-/*
- * Deletes the book that matches the entered title and author.
- * Returns the possibly changed head pointer.
- */
+/* Deletes the matching book from the list, if it exists. */
 book *delete_from_list(book *head) {
   char title[TITLE_LEN], first[NAME_LEN], last[NAME_LEN];
 
@@ -97,12 +92,10 @@ book *delete_from_list(book *head) {
   book *cur = head;
   book *prev = NULL;
 
-  /* Keep prev one node behind cur so the matching node can be unlinked. */
   while (cur != NULL) {
     if (strcmp(cur->title, title) == 0 && strcmp(cur->first, first) == 0 &&
         strcmp(cur->last, last) == 0) {
 
-      /* Deleting the first node changes the head pointer. */
       if (prev == NULL)
         head = cur->next;
       else
@@ -121,7 +114,7 @@ book *delete_from_list(book *head) {
   return head;
 }
 
-/* Prints all books in the list using columns for easier reading. */
+/* Prints the list in the same column format required by the project. */
 void print_list(book *head) {
   printf("Title\t\t\t\t\tFirst Name\tLast Name\tRequests  Price\n");
 
@@ -134,7 +127,7 @@ void print_list(book *head) {
   printf("\n");
 }
 
-/* Frees every node before the program exits. */
+/* Releases all dynamically allocated nodes in the list. */
 void clear_list(book *head) {
   book *temp;
   while (head != NULL) {
