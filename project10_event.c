@@ -1,9 +1,9 @@
 /*
  * project10_event.c
  *
- * This program reads customer data from a CSV file, sorts the customers
- * by the number of purchases in the last three years in ascending order
- * using qsort, and writes the sorted data to result.csv.
+ * This program reads customer data from a CSV file,
+ * sorts customers by number of purchases (ascending)
+ * using qsort, and writes the result to result.csv.
  *
  * Name: Your Name
  */
@@ -15,18 +15,17 @@
 #define MAX_CUSTOMERS 1000
 #define MAX_LINE 256
 
-// Structure to store customer data
+// Customer structure
 typedef struct {
-  int id;
-  char name[50];
+  char email[100];
   int purchases;
+  char name[100];
 } Customer;
 
 /*
  * compare_customers
  * -----------------
- * Comparison function for qsort.
- * Sorts customers in ascending order of purchases.
+ * Comparison function for qsort (ascending by purchases)
  */
 int compare_customers(const void *a, const void *b) {
   Customer *c1 = (Customer *)a;
@@ -42,7 +41,9 @@ int main() {
   Customer customers[MAX_CUSTOMERS];
   int count = 0;
 
-  // Prompt user
+  char line[MAX_LINE];
+
+  // Prompt
   printf("Enter the file name: ");
   scanf("%s", filename);
 
@@ -53,28 +54,40 @@ int main() {
     return 1;
   }
 
-  char line[MAX_LINE];
-
   // Read file line by line
   while (fgets(line, sizeof(line), input_file)) {
+
     // Remove newline
-    line[strcspn(line, "\n")] = 0;
+    line[strcspn(line, "\n")] = '\0';
 
-    // Parse CSV (assumes format: id,name,purchases)
-    char *token = strtok(line, ",");
+    // Skip empty lines
+    if (strlen(line) == 0)
+      continue;
+
+    char *token;
+
+    // 1. Email
+    token = strtok(line, ",");
     if (token == NULL)
       continue;
-    customers[count].id = atoi(token);
+    strcpy(customers[count].email, token);
 
-    token = strtok(NULL, ",");
-    if (token == NULL)
-      continue;
-    strcpy(customers[count].name, token);
-
+    // 2. Purchases
     token = strtok(NULL, ",");
     if (token == NULL)
       continue;
     customers[count].purchases = atoi(token);
+
+    // 3. Name
+    token = strtok(NULL, "\n");
+    if (token == NULL)
+      continue;
+
+    // Remove leading spaces
+    while (*token == ' ')
+      token++;
+
+    strcpy(customers[count].name, token);
 
     count++;
   }
@@ -91,15 +104,13 @@ int main() {
     return 1;
   }
 
-  // Write sorted data
+  // Write output (STRICT FORMAT)
   for (int i = 0; i < count; i++) {
-    fprintf(output_file, "%d,%s,%d\n", customers[i].id, customers[i].name,
-            customers[i].purchases);
+    fprintf(output_file, "%s, %d,   %s\n", customers[i].email,
+            customers[i].purchases, customers[i].name);
   }
 
   fclose(output_file);
-
-  printf("Data sorted and written to result.csv\n");
 
   return 0;
 }
