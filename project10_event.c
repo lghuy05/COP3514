@@ -5,7 +5,8 @@
  * sorts customers by number of purchases (ascending)
  * using qsort, and writes the result to result.csv.
  *
- * Name: Your Name
+ * Name: Yui Luong
+ * UID: U09663368
  */
 
 #include <stdio.h>
@@ -24,7 +25,6 @@ typedef struct {
 
 /*
  * compare_customers
- * -----------------
  * Comparison function for qsort (ascending by purchases)
  */
 int compare_customers(const void *a, const void *b) {
